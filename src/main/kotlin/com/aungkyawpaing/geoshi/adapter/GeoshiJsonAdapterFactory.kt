@@ -8,30 +8,30 @@ import java.lang.reflect.Type
 class GeoshiJsonAdapterFactory : JsonAdapter.Factory {
 
   override fun create(type: Type, annotations: MutableSet<out Annotation>, moshi: Moshi): JsonAdapter<*>? {
-    when (type) {
+    val adapter = when (type) {
       Position::class.java -> {
-        return PositionJsonAdapter()
+        PositionJsonAdapter()
       }
       Point::class.java -> {
-        return PointJsonAdapter(moshi.adapter(Position::class.java))
+        PointJsonAdapter(moshi.adapter(Position::class.java))
       }
       LineString::class.java -> {
-        return LineStringJsonAdapter(moshi.adapter(Position::class.java))
+        LineStringJsonAdapter(moshi.adapter(Position::class.java))
       }
       Polygon::class.java -> {
-        return PolygonJsonAdapter(moshi.adapter(Position::class.java))
+        PolygonJsonAdapter(moshi.adapter(Position::class.java))
       }
       MultiPoint::class.java -> {
-        return MultiPointJsonAdapter(moshi.adapter(Position::class.java))
+        MultiPointJsonAdapter(moshi.adapter(Position::class.java))
       }
       MultiLineString::class.java -> {
-        return MultiLineStringJsonAdapter(moshi.adapter(Position::class.java))
+        MultiLineStringJsonAdapter(moshi.adapter(Position::class.java))
       }
       MultiPolygon::class.java -> {
-        return MultiPolygonJsonAdapter(moshi.adapter(Position::class.java))
+        MultiPolygonJsonAdapter(moshi.adapter(Position::class.java))
       }
       GeometryCollection::class.java -> {
-        return GeometryCollectionJsonAdapter(
+        GeometryCollectionJsonAdapter(
           moshi.adapter(Point::class.java),
           moshi.adapter(LineString::class.java),
           moshi.adapter(Polygon::class.java),
@@ -42,7 +42,7 @@ class GeoshiJsonAdapterFactory : JsonAdapter.Factory {
       }
       Feature::class.java -> {
         val wildCardAdapter = moshi.adapter<Any>(Any::class.java)
-        return FeatureJsonAdapter(
+        FeatureJsonAdapter(
           wildCardAdapter,
           moshi.adapter(Point::class.java),
           moshi.adapter(LineString::class.java),
@@ -54,10 +54,11 @@ class GeoshiJsonAdapterFactory : JsonAdapter.Factory {
         )
       }
       FeatureCollection::class.java -> {
-        return FeatureCollectionJsonAdapter(moshi.adapter(Feature::class.java))
+        FeatureCollectionJsonAdapter(moshi.adapter(Feature::class.java))
       }
+      else -> null
     }
-    return null
+    return adapter.nullSafe()
   }
 
 
