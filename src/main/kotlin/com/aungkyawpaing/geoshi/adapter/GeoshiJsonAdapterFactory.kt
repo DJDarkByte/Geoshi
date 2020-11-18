@@ -58,7 +58,7 @@ class GeoshiJsonAdapterFactory : JsonAdapter.Factory {
       }
       else -> null
     }
-    return adapter.nullSafe()
+    return adapter?.nullSafe()
   }
 
 
